@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balkan Amnesia - SA:MP Server</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0088c6;
+            --primary-light: #0088c6;
+            --primary-dark: #0088c6;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --bg-card-hover: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border: #27272a;
+            --gradient-start: #0088c6;
+            --gradient-end: #043b75;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Snow Animation */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1em;
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--primary) 0%, #0088c6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a i {
+            font-size: 1.1rem;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(38, 126, 220, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at top, rgba(220, 38, 38, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, #0088c6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .hero-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
+        }
+
+        /* Server Status Card */
+        .server-status {
+            position: absolute;
+            bottom: 2rem;
+            left: 0;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            min-width: 320px;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: #0088c6;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .player-count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding: 0.2rem 0.8rem;
+            background-color: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            margin-left: auto;
+        }
+
+        .server-ip {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .server-ip-text {
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Card */
+        .hero-card {
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95) 0%, rgba(30, 30, 35, 0.95) 100%);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            min-width: 400px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .samp-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .player-info i {
+            color: #22c55e;
+        }
+
+        .player-info span {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #22c55e;
+        }
+
+        .server-status-main {
+            margin-bottom: 1.5rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .status-indicator span {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .connect-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* How to Play Section */
+        .how-to-play {
+            background: var(--bg-dark);
+            text-align: center;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(220, 38, 38, 0.1);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 2rem;
+            font-size: 6rem;
+            font-weight: 900;
+            color: rgba(220, 38, 38, 0.1);
+            line-height: 1;
+        }
+
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-icon.blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .step-icon.purple {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+        }
+
+        .step-icon.red {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .step-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .step-link:hover {
+            gap: 1rem;
+        }
+
+        /* Features Section */
+        .features {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #0f0f0f 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon.cyan { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
+        .feature-icon.green { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+        .feature-icon.purple { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
+        .feature-icon.yellow { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
+        .feature-icon.pink { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); }
+        .feature-icon.blue { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: var(--bg-dark);
+            padding: 4rem 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, #0088c6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* About Section */
+        .about {
+            background: linear-gradient(180deg, #0f0f0f 0%, var(--bg-dark) 100%);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text h2 span {
+            background: linear-gradient(135deg, var(--primary) 0%, #0088c6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .about-feature i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .about-feature span {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .about-image {
+            background: linear-gradient(135deg, var(--bg-card) 0%, #1a1a2e 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .about-logo {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, #0088c6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .about-tagline {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        /* Donations Section */
+        .donations {
+            background: var(--bg-dark);
+            text-align: center;
+        }
+
+        .donation-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .donation-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .donation-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .donation-btn {
+            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .donation-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(88, 101, 242, 0.3);
+        }
+
+        /* Social Section */
+        .social {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #0f0f0f 100%);
+            text-align: center;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .social-icon.discord {
+            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+        }
+
+        .social-icon.youtube {
+            background: linear-gradient(135deg, #0088c6 0%, #0088c6 100%);
+        }
+
+        .social-info {
+            text-align: left;
+            flex: 1;
+        }
+
+        .social-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .social-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .social-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #050505;
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, #0088c6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-sub {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-image {
+                order: -1;
+            }
+
+            .server-status {
+                position: relative;
+                margin: 2rem auto 0;
+            }
+
+            .steps-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Winter overlay effect */
+        .winter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at top, rgba(255,255,255,0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Smooth animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Snow Effect -->
+    <div class="snowflakes" id="snowflakes"></div>
+    <div class="winter-overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-text">BALKAN AMNESIA</span>
+                <span class="logo-sub">Gaming Community</span>
+            </div>
+            <nav>
+                <a href="#home">
+                    <i class="fas fa-home"></i>
+                    POCETNA
+                </a>
+                <a href="#zaigraj">
+                    <i class="fas fa-gamepad"></i>
+                    ZAIGRAJ
+                </a>
+                <a href="#about">
+                    <i class="fas fa-info-circle"></i>
+                    O NAMA
+                </a>
+                <a href="https://forum.balkan-amnesia.xyz" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-heart"></i>
+                    FORUM
+                </a>
+            </nav>
+            <a href="samp://samp.balkan-amnesia.xyz:7777" class="btn-primary">
+                <i class="fas fa-gamepad"></i>
+                ZAPOCNI IGRU
+            </a>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Tvoja<br><span>GTA avantura</span><br>pocinje ovdje</h1>
+                <p>Udji u dinamican online svet pun akcije, roleplaya i zabave. Tvoje avanture pocinju ovde na Balkan Amnesia serveru!</p>
+                <div class="hero-buttons">
+                    <a href="samp://samp.balkan-amnesia.xyz:7777" class="btn-primary">
+                        <i class="fas fa-gamepad"></i>
+                        ZAPOCNI IGRU
+                    </a>
+                    <a href="https://discord.gg/TArVCfWka9" target="_blank" class="btn-outline">
+                        <i class="fab fa-discord"></i>
+                        DISCORD
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <span class="samp-badge">SA:MP</span>
+                        <div class="player-info">
+                            <i class="fas fa-users"></i>
+                            <span id="playerCount">0</span>
+                        </div>
+                    </div>
+                    <div class="server-status-main">
+                        <div class="status-indicator">
+                            <div class="status-dot" id="statusDot"></div>
+                            <span id="statusLabel">Provera servera...</span>
+                        </div>
+                    </div>
+                    <div class="server-ip">
+                        <span class="server-ip-text" id="serverIp">samp.balkan-amnesia.xyz:7777</span>
+                        <button class="copy-btn" onclick="copyIP()">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <a href="samp://samp.balkan-amnesia.xyz:7777" class="connect-btn">
+                        <i class="fas fa-play"></i>
+                        PRIKLJUCI SE
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Announcement Banner -->
+    <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); padding: 1.5rem 2rem;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;">Winter Update je stigao!</h3>
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.95rem;">Donosi niz poboljsanja, novih sadrzaja i sezonskih izmena. Za kompletan spisak promena i sve detalje posjetite nas <a href="https://discord.gg/TArVCfWka9" target="_blank" style="color: white; font-weight: 600; text-decoration: underline;">Discord server</a>.</p>
+        </div>
+    </div>
+
+    <!-- How to Play Section -->
+    <section class="how-to-play" id="zaigraj">
+        <div class="section-container">
+            <h2 class="section-title">Kako zapoceti igru?</h2>
+            <p class="section-subtitle">Prati jednostavne korake i pridruzi nam se</p>
+
+            <div class="steps-grid">
+                <div class="step-card fade-in">
+                    <span class="step-number">01</span>
+                    <div class="step-icon blue">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Preuzmi GTA:SA</h3>
+                    <p>Klikom ispod preuzmi cistu verziju GTA San Andreas igre.</p>
+                    <a href="https://www.mediafire.com/file/kvervpisujd8teq/Gta+san+andreas.rar/file" target="_blank" class="step-link">
+                        PREUZMI <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="step-card fade-in">
+                    <span class="step-number">02</span>
+                    <div class="step-icon purple">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h3>Preuzmi SA:MP</h3>
+                    <p>Klikom ispod preuzmi najnoviju verziju SA:MP 0.3.7 R5.</p>
+                    <a href="https://hzgaming.net/downloads/sa-mp-0.3.7-R5-2-MP-install.exe" target="_blank" class="step-link">
+                        PREUZMI <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="step-card fade-in">
+                    <span class="step-number">03</span>
+                    <div class="step-icon red">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3>Pokreni igru</h3>
+                    <p>Klikom ispod dodaj nasu IP adresu i klikni "Connect".</p>
+                    <a href="samp://samp.balkan-amnesia.xyz:7777" class="step-link">
+                        ZAIGRAJ <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-container">
+            <h2 class="section-title">Zasto smo najbolji</h2>
+            <p class="section-subtitle">Stvorili smo jedinstveni svijet igre u kojem je svaki detalj vazan.</p>
+
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon cyan">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Unikatan mod</h3>
+                    <p>Zaboravi klasicne servere, ovdje te ceka unikatni mod, originalne ideje i konstantan razvoj sistema koji nude dugorocno iskustvo igranja.</p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon green">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Stabilna ekonomija</h3>
+                    <p>Ekonomija je stabilna i dugorocno odrziva sa realnim cijenama i balansiranim nacinima zarade.</p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon purple">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Aktivan staff</h3>
+                    <p>Aktivan i posvecan Staff Team koji je redovno prisutan na serveru i spreman da pomogne igracima u svakom trenutku.</p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon yellow">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Odlican AntiCheat</h3>
+                    <p>Posebna paznja je posvecena AntiCheat sistemu kako bi se sprijecilo varanje i sacuvala ravnopravnost medu igracima.</p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon pink">
+                        <i class="fas fa-dice"></i>
+                    </div>
+                    <h3>Raznovrstan gameplay</h3>
+                    <p>Fokus je na raznovrsnom gameplayu kroz DM, borbi za teritorije, pljacke i evente koji igracima nude konstantnu akciju i zabavu.</p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon blue">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Kontinuiran razvoj</h3>
+                    <p>Server se konstantno razvija kroz nove sisteme, poboljsanja i redovne updateove, uz pracenje prijedloga i potreba zajednice.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="section-container">
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Clanova zajednice</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Staff clanova</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Prosecno evenata</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number">2021</div>
+                    <div class="stat-label">Godina osnivanja</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="section-container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>O <span>Balkan Amnesia</span></h2>
+                    <p>Balkan Amnesia je SA-MP server koji je pokrenut 2021. godine sa ciljem da pruzi jedinstveno gaming iskustvo balkanskoj zajednici. Od samog pocetka, nas tim je fokusiran na kreiranje kvalitetnog sadrzaja, odrzavanje stabilne ekonomije i pruzanje konstantne podrske igracima.</p>
+                    <p>Nasa zajednica broji vise od 100 clanova, a posveceni staff tim od 20+ clanova radi neprestano kako bi svima omogucio najbolje moguce iskustvo. Redovno organizujemo evente, takmicenja i razne aktivnosti koje cine igru zabavnijom.</p>
+
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Aktivan Staff Team</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Redovni eventi</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Unikatan gameplay</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Konstantni update-ovi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-image">
+                    <div class="about-logo">BA</div>
+                    <p class="about-tagline">Balkan Amnesia Gaming Community<br>Od 2021. godine</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donations Section -->
+    <section class="donations" id="donations">
+        <div class="section-container">
+            <h2 class="section-title">Donacije</h2>
+            <p class="section-subtitle">Podrzi razvoj servera i zajednice</p>
+
+            <div class="donation-card fade-in">
+                <h3>Zelis da podrzis server?</h3>
+                <p>Sve informacije o donacijama i dostupnim paketima mozete pronaci na nasem Discord serveru. Tamo cete dobiti sve potrebne informacije o nacinu placanja i benefitima koje donacije donose.</p>
+                <a href="https://discord.gg/V6vztw4FQU" target="_blank" class="donation-btn">
+                    <i class="fab fa-discord"></i>
+                    POGLEDAJ DONACIJE NA DISCORD-u
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Section -->
+    <section class="social">
+        <div class="section-container">
+            <h2 class="section-title">Drustvene mreze</h2>
+            <p class="section-subtitle">Pratite nas na drustvenim mrezama</p>
+
+            <div class="social-grid">
+                <a href="https://discord.gg/TArVCfWka9" target="_blank" class="social-card fade-in">
+                    <div class="social-icon discord">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <div class="social-info">
+                        <h4>Discord</h4>
+                        <p>Pridruzi se serveru</p>
+                    </div>
+                    <i class="fas fa-external-link-alt social-arrow"></i>
+                </a>
+
+                <a href="https://discord.gg/TArVCfWka9" target="_blank" class="social-card fade-in">
+                    <div class="social-icon youtube" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="social-info">
+                        <h4>Zajednica</h4>
+                        <p>Upoznaj nove ljude</p>
+                    </div>
+                    <i class="fas fa-external-link-alt social-arrow"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">BALKAN AMNESIA</div>
+            <div class="footer-sub">GAMING COMMUNITY</div>
+
+            <div class="footer-links">
+                <a href="#about">O NAMA</a>
+                <a href="#donations">DONACIJE</a>
+                <a href="#zaigraj">ZAIGRAJ</a>
+                <a href="https://discord.gg/TArVCfWka9" target="_blank">DISCORD</a>
+            </div>
+
+            <p class="footer-copyright">
+                &copy; 2026 Balkan Amnesia. Nije povezan sa Rockstar Games ili Take-Two Interactive.<br>
+                Napravljeno sa <span style="color: var(--primary);">&#10084;</span> za balkansku zajednicu.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Create snowflakes
+        function createSnowflakes() {
+            const snowflakesContainer = document.getElementById('snowflakes');
+            const snowflakeCount = 50;
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '&#10052;';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                snowflake.style.animationDelay = (Math.random() * 10) + 's';
+                snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+                snowflakesContainer.appendChild(snowflake);
+            }
+        }
+
+        // Copy IP function
+        function copyIP() {
+            const ip = document.getElementById('serverIp').textContent;
+            navigator.clipboard.writeText(ip).then(() => {
+                alert('IP adresa je kopirana: ' + ip);
+            });
+        }
+
+        // Fetch server status using SA-MP Query API
+        async function fetchServerStatus() {
+            const statusDot = document.getElementById('statusDot');
+            const statusLabel = document.getElementById('statusLabel');
+            const playerCount = document.getElementById('playerCount');
+            const playerInfo = document.querySelector('.player-info');
+
+            // Try multiple APIs
+            const apis = [
+                `https://api.open.mp/servers/samp.balkan-amnesia.xyz:7777`,
+                `https://api.samp-servers.net/v2/server/samp.balkan-amnesia.xyz:7777`
+            ];
+
+            let serverOnline = false;
+            let players = 0;
+
+            for (const apiUrl of apis) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+                    const response = await fetch(apiUrl, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        players = data.pc || data.players || data.online || 0;
+                        serverOnline = true;
+                        break;
+                    }
+                } catch (e) {
+                    // Try next API
+                    continue;
+                }
+            }
+
+            if (serverOnline) {
+                playerCount.textContent = players;
+                statusDot.classList.remove('offline');
+                statusLabel.textContent = players > 0 ? 'Server online' : 'Server online - ceka na igrace';
+                if (playerInfo) {
+                    playerInfo.style.borderColor = 'rgba(34, 197, 94, 0.5)';
+                    playerInfo.style.background = 'rgba(34, 197, 94, 0.1)';
+                }
+            } else {
+                // Server might be offline or API unavailable
+                statusDot.classList.add('offline');
+                statusLabel.textContent = 'Provera nije uspela';
+                playerCount.textContent = '-';
+                if (playerInfo) {
+                    playerInfo.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+                    playerInfo.style.background = 'rgba(239, 68, 68, 0.1)';
+                    playerInfo.querySelector('i').style.color = '#ef4444';
+                    playerInfo.querySelector('span').style.color = '#ef4444';
+                }
+            }
+        }
+
+        // Fade in animation on scroll
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            elements.forEach(el => observer.observe(el));
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createSnowflakes();
+            fetchServerStatus();
+            handleScrollAnimations();
+
+            // Refresh server status every 60 seconds
+            setInterval(fetchServerStatus, 60000);
+        });
+    </script>
+</body>
+</html>
